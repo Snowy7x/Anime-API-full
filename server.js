@@ -3,9 +3,6 @@ require("dotenv").config();
 const express = require("express");
 const anime = require("./routes/anime");
 const manga = require("./routes/manga");
-const CryptoJS = require("crypto-js");
-const axios = require("axios");
-const { load } = require("cheerio");
 
 const app = express();
 
@@ -32,4 +29,4 @@ function authenticateToken(req, res, next) {
 //getEnglishEpisode("naruto-677-episode-12352").then((e) => console.log(e));
 
 mongoose.connection.on("open", () => {});
-app.listen(4000, log("Server", "API Listening on port 3000"));
+app.listen(4000, log("Server", "API Listening on port 4000"));
