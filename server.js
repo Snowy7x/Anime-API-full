@@ -26,7 +26,6 @@ function authenticateToken(req, res, next) {
     next();
   });
 }
-//getEnglishEpisode("naruto-677-episode-12352").then((e) => console.log(e));
 
 mongoose.connection.on("open", () => {});
 app.listen(4000, log("Server", "API Listening on port 4000"));

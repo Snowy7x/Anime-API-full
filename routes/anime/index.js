@@ -1,5 +1,11 @@
 const express = require("express");
-const { mongoose, AnimeModal, getAnimeById } = require("../../utils/db");
+const {
+  mongoose,
+  AnimeModal,
+  getAnimeById,
+  getTopAnimes,
+  getLatestEpisodes,
+} = require("../../utils/db");
 const { getArabicEpisode, getEnglishEpisode } = require("../../utils/episodes");
 const router = express.Router();
 
@@ -7,12 +13,12 @@ router.get("/", (req, res) => {
   res.sendStatus(404);
 });
 
-router.get("/:id", async (req, res) => {
-  const id = req.params.id;
-  if (!isNumeric(id)) return res.sendStatus(404);
-  const anime = await getAnimeById(id);
-  if (anime) return res.send(anime);
-  else return res.sendStatus(404);
+router.get("/top", async (req, res) => {
+  return await getTopAnimes();
+});
+
+router.get("/latest", async (req, res) => {
+  return await getLatestEpisodes();
 });
 
 router.get("/search/:animeName", (req, res) => {
@@ -49,6 +55,14 @@ router.get("/episode/:animeId/:episodeId", async (req, res) => {
     }
     return res.send(ep);
   } else return res.sendStatus(404);
+});
+
+router.get("/:id", async (req, res) => {
+  const id = req.params.id;
+  if (!isNumeric(id)) return res.sendStatus(404);
+  const anime = await getAnimeById(id);
+  if (anime) return res.send(anime);
+  else return res.sendStatus(404);
 });
 
 function isNumeric(str) {

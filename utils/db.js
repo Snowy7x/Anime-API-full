@@ -124,9 +124,55 @@ const MangaSchema = new Schema({
   relations: [Relation],
   recommended: [Recommendation],
 });
+
+const LatestEpisodeSchema = new Schema({
+  id: { type: Number, default: null, sparse: true },
+  mal_id: { type: Number, default: null },
+  ani_id: { type: Number, default: null },
+  epId: { type: Number, default: null },
+  epIdEn: { type: String, default: null },
+
+  epNumber: { type: String, default: null },
+  name: { type: String, default: null },
+  description_ar: { type: String, default: null },
+  description_en: { type: String, default: null },
+  coverUrl: { type: String, default: null },
+
+  score: { type: Number, default: null },
+  scored_by: { type: Number, default: null },
+
+  type: { type: String, default: null },
+  status: { type: String, default: null },
+
+  genres_ar: [T_Schema],
+  genres_en: [T_Schema],
+});
+
+const topAnimeSchema = new Schema({
+  id: { type: Number, default: null, sparse: true },
+  mal_id: { type: Number, default: null },
+  ani_id: { type: Number, default: null },
+
+  name: { type: String, default: null },
+  description_ar: { type: String, default: null },
+  description_en: { type: String, default: null },
+  coverUrl: { type: String, default: null },
+
+  rank: { type: Number, default: null },
+  score: { type: Number, default: null },
+  scored_by: { type: Number, default: null },
+
+  type: { type: String, default: null },
+  status: { type: String, default: null },
+
+  genres_ar: [T_Schema],
+  genres_en: [T_Schema],
+});
+
 const AnimeModal = model("Anime", AnimeSchema);
 const MangaModal = model("Manga", MangaSchema);
-
+const LatestEpisodeModal = model("LatestEpisode", LatestEpisodeSchema);
+const topAnimeModal = model("topAnime", topAnimeSchema);
 // Functions:
 
 /**
@@ -147,6 +193,14 @@ async function getMangaById(id) {
   await MangaModal.findOne({ id: id }).catch((err) => null);
 }
 
+async function getTopAnimes() {
+  return await topAnimeModal.find({});
+}
+
+async function getLatestEpisodes() {
+  return await LatestEpisodeModal.find({});
+}
+
 module.exports = {
   mongoose,
   AnimeModal,
@@ -154,4 +208,6 @@ module.exports = {
   MangaModal,
   getAnimeById,
   getMangaById,
+  getTopAnimes,
+  getLatestEpisodes,
 };
