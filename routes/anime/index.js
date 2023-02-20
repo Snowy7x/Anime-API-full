@@ -14,11 +14,13 @@ router.get("/", (req, res) => {
 });
 
 router.get("/top", async (req, res) => {
-  return await getTopAnimes();
+  const top = await getTopAnimes();
+  res.send(top);
 });
 
 router.get("/latest", async (req, res) => {
-  return await getLatestEpisodes();
+  const latest = await getLatestEpisodes();
+  res.send(latest);
 });
 
 router.get("/search/:animeName", (req, res) => {
