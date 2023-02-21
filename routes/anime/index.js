@@ -14,17 +14,22 @@ router.get("/", (req, res) => {
 });
 
 router.get("/top", async (req, res) => {
+  const { limit, offset } = req.params;
   const top = await getTopAnimes();
+  if (limit) top = top.slice(offset ?? 0, offset ?? 0 + limit);
+
   res.send(top);
 });
 
 router.get("/latest", async (req, res) => {
+  const { limit, offset } = req.params;
   const latest = await getLatestEpisodes();
+  if (limit) latest = latest.slice(offset ?? 0, offset ?? 0 + limit);
   res.send(latest);
 });
 
 router.get("/search/:animeName", (req, res) => {
-  const { animeName } = req.params;
+  const { animeName, limit, offset } = req.params;
   AnimeModal.find({
     justInfo: false,
     keywords: {
@@ -33,6 +38,8 @@ router.get("/search/:animeName", (req, res) => {
   })
     .then((result) => {
       if (result == null) return res.send([]);
+      if (limit) result = result.slice(offset ?? 0, offset ?? 0 + limit);
+
       return res.send(result);
     })
     .catch((err) => res.send([]));
@@ -65,6 +72,22 @@ router.get("/:id", async (req, res) => {
   const anime = await getAnimeById(id);
   if (anime) return res.send(anime);
   else return res.sendStatus(404);
+});
+
+router.post("/search", async (req, res) => {
+  const { query, filters, limit, offset } = req.body;
+  AnimeModal.find({
+    justInfo: false,
+    keywords: {
+      $elemMatch: { $in: new RegExp(query, "ig") },
+    },
+    ...filters,
+  }).then((result) => {
+    if (result == null) return res.send([]);
+    if (limit) result = result.slice(offset ?? 0, offset ?? 0 + limit);
+
+    return res.send(result);
+  });
 });
 
 function isNumeric(str) {
