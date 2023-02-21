@@ -172,6 +172,14 @@ async function getEnglishEpisode(episodeId) {
       }
     });
 
+    if (!dataId) {
+      $(`div.servers-raw > div.ps__-list > div.server-item`).each((i, el) => {
+        if ($(el).attr("data-server-id") == 1) {
+          dataId = $(el).attr("data-id");
+        }
+      });
+    }
+
     const sources = await scrapeSource(dataId);
 
     return sources;
