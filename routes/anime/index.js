@@ -76,7 +76,8 @@ router.get("/:id", async (req, res) => {
 
 router.post("/search", async (req, res) => {
   const { query, filters, limit, offset } = req.body;
-  AnimeModal.find({
+  console.log(query, filters, limit, offset);
+  await AnimeModal.find({
     justInfo: false,
     keywords: {
       $elemMatch: { $in: new RegExp(query, "ig") },
@@ -84,8 +85,7 @@ router.post("/search", async (req, res) => {
     ...filters,
   }).then((result) => {
     if (result == null) return res.send([]);
-    if (limit) result = result.slice(offset ?? 0, offset ?? 0 + limit);
-
+    if (limit) result = result.slice(offset ?? 0, (offset ?? 0) + limit);
     return res.send(result);
   });
 });
