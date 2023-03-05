@@ -21,6 +21,7 @@
     "mime": "^3.0.0",
     "mongoose": "^6.9.1",
     "mongoose-sequence": "^5.3.1",
+    "node-fetch": "^2.6.9",
     "zoro-to-api": "^1.0.2"
   }
 }

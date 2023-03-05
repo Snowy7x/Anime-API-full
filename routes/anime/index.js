@@ -1,4 +1,5 @@
 const express = require("express");
+const router = express.Router();
 const {
   mongoose,
   AnimeModal,
@@ -7,7 +8,6 @@ const {
   getLatestEpisodes,
 } = require("../../utils/db");
 const { getArabicEpisode, getEnglishEpisode } = require("../../utils/episodes");
-const router = express.Router();
 
 router.get("/", (req, res) => {
   res.sendStatus(404);

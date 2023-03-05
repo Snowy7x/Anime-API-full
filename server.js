@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const anime = require("./routes/anime");
 const manga = require("./routes/manga");
+const tools = require("./routes/tools");
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(express.json());
 
 app.use("/anime", anime);
 app.use("/manga", manga);
+app.use("/tools", tools);
 
 const jwt = require("jsonwebtoken");
 const { log } = require("./utils/logs");
