@@ -26,7 +26,7 @@ router.get("/latest", async (req, res) => {
   let latest = await getLatestEpisodes();
   latest = latest.reverse();
   if (limit) latest = latest.slice(offset ?? 0, offset ?? 0 + limit);
-  res.send();
+  res.send(latest);
 });
 
 router.get("/search/:animeName", (req, res) => {
