@@ -88,8 +88,7 @@ async function getArabicEpisode(animeId, episodeId) {
 
     const url_ = new URL(urls[0].episode_url);
     const params_ = url_.searchParams;
-    console.log(params_.get("f"));
-    console.log(params_.get("e"));
+
     const og_urls = await axios
       .post(
         "https://anslayer.com/anime/public/v-qs.php",
@@ -113,7 +112,9 @@ async function getArabicEpisode(animeId, episodeId) {
         );
         let js = JSON.parse(decrypted.toString());
         for (let i in js) {
-          let link = js[i].file;
+          let link =
+            "http://www.snowyanime.com:4000/tools/proxy?url=" +
+            encodeURIComponent(js[i].file);
           js[i].label = link.includes("h.mp4")
             ? "1080p"
             : link.includes("m.mp4")
