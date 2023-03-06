@@ -131,7 +131,12 @@ async function getArabicEpisode(animeId, episodeId) {
       });
     servers.push({
       type: "backup",
-      link: og_urls,
+      link: {
+        host: "www.snowyanime.com",
+        url: "http://www.snowyanime.com:4000/tools/proxy",
+        type: -1,
+        urls: og_urls,
+      },
     });
   }
   /*   for (let s of normal_servers) {
