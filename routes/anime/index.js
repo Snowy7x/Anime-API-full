@@ -6,11 +6,17 @@ const {
   getAnimeById,
   getTopAnimes,
   getLatestEpisodes,
+  ScheduleModal,
 } = require("../../utils/db");
 const { getArabicEpisode, getEnglishEpisode } = require("../../utils/episodes");
 
 router.get("/", (req, res) => {
   res.sendStatus(404);
+});
+
+router.get("/schedule", async (req, res) => {
+  const schedule = await ScheduleModal.findOne();
+  res.send(schedule.toJSON());
 });
 
 router.get("/top", async (req, res) => {

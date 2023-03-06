@@ -169,10 +169,21 @@ const topAnimeSchema = new Schema({
   genres_en: [T_Schema],
 });
 
+const ScheduleSchema = new Schema({
+  Saturday: [AnimeSchema],
+  Sunday: [AnimeSchema],
+  Monday: [AnimeSchema],
+  Tuesday: [AnimeSchema],
+  Wednesday: [AnimeSchema],
+  Thursday: [AnimeSchema],
+  Friday: [AnimeSchema],
+});
+
 const AnimeModal = model("Anime", AnimeSchema);
 const MangaModal = model("Manga", MangaSchema);
 const LatestEpisodeModal = model("LatestEpisode", LatestEpisodeSchema);
 const topAnimeModal = model("topAnime", topAnimeSchema);
+const ScheduleModal = mongoose.model("Schedule", ScheduleSchema);
 // Functions:
 
 /**
@@ -206,6 +217,7 @@ module.exports = {
   AnimeModal,
   AnimeSchema,
   MangaModal,
+  ScheduleModal,
   getAnimeById,
   getMangaById,
   getTopAnimes,
