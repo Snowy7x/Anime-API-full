@@ -2,6 +2,7 @@ const { scrapeSource } = require("./rapid-cloud.js");
 const axios = require("axios");
 const { load } = require("cheerio");
 const { log } = require("./logs.js");
+const RNCryptor = require("rncryptor-node");
 
 const zoroBase = "https://zoro.to";
 
@@ -87,15 +88,49 @@ async function getArabicEpisode(animeId, episodeId) {
 
     const url_ = new URL(urls[0].episode_url);
     const params_ = url_.searchParams;
-    servers.push({
-      type: "backup",
-      link:
-        "https://anslayer.com/anime/public/v-qs.php?" +
+    console.log(params_.get("f"));
+    console.log(params_.get("e"));
+    const og_urls = await axios
+      .post(
+        "https://anslayer.com/anime/public/v-qs.php",
         new URLSearchParams({
           f: params_.get("f"),
           e: params_.get("e"),
-          inf: '{"a": "mrg+e9GTkHaj8WXD7Cz3+Wbc1E4xYrvHLqW1vRF8xSo2B4K7Y5B7wcjHaoL1haW8Ynp3gYuGBRWFY/XaoEzVRcM/g8pJtaAT3FgwZh+KajpmkenxL0V/ghBXTwctGtEQFUO/UAJVGx2QClCE6gKSTQ==", "b": "102.185.179.127"}',
-        }).toString(),
+          inf: `{"a": "4+mwbwVfA5wLr7a4GBQvzMy1/jO9fRQ/lKJXNS4vbW/FqNL3j0vtOPd5pQx2UxrJ/8UF0Xr/v/dxkse3tjvEg/1uLKKZM8CALrQrGtw0pQqZ+UiyBJqVXe9tlbFSkV9XQRkIC6qjY66uzkzk6wauPw==", "b": "217.138.207.148"}`,
+        }),
+        {
+          headers: {
+            "User-Agent":
+              "Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36",
+            Host: "anslayer.com",
+          },
+        }
+      )
+      .then((re) => {
+        let decrypted = RNCryptor.Decrypt(
+          re.data,
+          "android-app9>E>VBa=X%;[5BX~=Q~K"
+        );
+        let js = JSON.parse(decrypted.toString());
+        for (let i in js) {
+          let link = js[i].file;
+          js[i].label = link.includes("h.mp4")
+            ? "1080p"
+            : link.includes("m.mp4")
+            ? "720p"
+            : link.includes("s.mp4")
+            ? "480p"
+            : "av";
+          js[i].file = js[i].file;
+        }
+        return js;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    servers.push({
+      label: "backup",
+      link: og_urls,
     });
   }
   /*   for (let s of normal_servers) {

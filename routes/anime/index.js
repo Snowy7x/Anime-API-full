@@ -97,6 +97,17 @@ router.post("/search", async (req, res) => {
   });
 });
 
+router.get("/backupWatch", async (req, res) => {
+  const { animeID, episodeId } = req.body;
+  await AnimeModal.find({
+    id: animeID,
+  }).then((result) => {
+    if (result == null) return res.send([]);
+    if (limit) result = result.slice(offset ?? 0, (offset ?? 0) + limit);
+    return res.send(result);
+  });
+});
+
 function isNumeric(str) {
   if (typeof str != "string") return false; // we only process strings!
   return (
