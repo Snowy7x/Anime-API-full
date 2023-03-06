@@ -112,9 +112,7 @@ async function getArabicEpisode(animeId, episodeId) {
         );
         let js = JSON.parse(decrypted.toString());
         for (let i in js) {
-          let link =
-            "http://www.snowyanime.com:4000/tools/proxy?url=" +
-            encodeURIComponent(js[i].file);
+          let link = js[i].file;
           js[i].label = link.includes("h.mp4")
             ? "1080p"
             : link.includes("m.mp4")
@@ -122,7 +120,9 @@ async function getArabicEpisode(animeId, episodeId) {
             : link.includes("s.mp4")
             ? "480p"
             : "av";
-          js[i].file = js[i].file;
+          js[i].file =
+            "http://www.snowyanime.com:4000/tools/proxy?url=" +
+            encodeURIComponent(js[i].file);
         }
         return js;
       })
