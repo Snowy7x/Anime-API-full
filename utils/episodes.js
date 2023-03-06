@@ -130,7 +130,7 @@ async function getArabicEpisode(animeId, episodeId) {
         console.log(err);
       });
     servers.push({
-      label: "backup",
+      type: "backup",
       link: og_urls,
     });
   }
