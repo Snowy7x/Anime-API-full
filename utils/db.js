@@ -179,11 +179,26 @@ const ScheduleSchema = new Schema({
   Friday: [AnimeSchema],
 });
 
+const Favorites = new Schema({
+  userId: String,
+  id: String,
+  name: String,
+  coverUrl: String,
+  score: { type: Number, default: null },
+  year: { type: Number, default: null },
+  type: { type: String, default: null },
+  status: { type: String, default: null },
+  genres_ar: [T_Schema],
+  genres_en: [T_Schema],
+});
+
 const AnimeModal = model("Anime", AnimeSchema);
 const MangaModal = model("Manga", MangaSchema);
 const LatestEpisodeModal = model("LatestEpisode", LatestEpisodeSchema);
 const topAnimeModal = model("topAnime", topAnimeSchema);
 const ScheduleModal = mongoose.model("Schedule", ScheduleSchema);
+
+const FavoritesModal = mongoose.model("Favorites", Favorites);
 // Functions:
 
 /**
@@ -212,14 +227,20 @@ async function getLatestEpisodes() {
   return await LatestEpisodeModal.find({});
 }
 
+async function getFavorites(userId) {
+  return await FavoritesModal.find({ userId: userId }).catch((err) => []);
+}
+
 module.exports = {
   mongoose,
   AnimeModal,
   AnimeSchema,
   MangaModal,
   ScheduleModal,
+  FavoritesModal,
   getAnimeById,
   getMangaById,
   getTopAnimes,
   getLatestEpisodes,
+  getFavorites,
 };

@@ -7,6 +7,8 @@ const {
   getTopAnimes,
   getLatestEpisodes,
   ScheduleModal,
+  FavoritesModal,
+  getFavorites,
 } = require("../../utils/db");
 const { getArabicEpisode, getEnglishEpisode } = require("../../utils/episodes");
 
@@ -82,6 +84,12 @@ router.get("/:id", async (req, res) => {
   else return res.sendStatus(404);
 });
 
+router.get("/fav/:userId", async (req, res) => {
+  const { userId } = req.params;
+  let favs = await getFavorites(userId);
+  return res.send(favs);
+});
+
 router.post("/search", async (req, res) => {
   const { query, filters, limit, offset } = req.body;
   console.log(query, filters, limit, offset);
@@ -96,6 +104,23 @@ router.post("/search", async (req, res) => {
     if (limit) result = result.slice(offset ?? 0, (offset ?? 0) + limit);
     return res.send(result);
   });
+});
+
+router.post("/addfav", async (req, res) => {
+  const { userId, animeId } = req.body;
+  if (!userId) return res.status(404).send("user not found");
+  if (!animeId) return res.status(404).send("anime not found");
+
+  const anime = await AnimeModal.find({ id: animeId }).catch(() => null);
+  if (!anime) return res.status(404).send("anime not found");
+
+  let fav = new FavoritesModal({
+    userId: userId,
+    id: animeId,
+    ...anime,
+  });
+  await fav.save();
+  return res.status(200).send(fav);
 });
 
 function isNumeric(str) {
