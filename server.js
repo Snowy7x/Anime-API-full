@@ -6,6 +6,7 @@ const manga = require("./routes/manga");
 const tools = require("./routes/tools");
 
 const app = express();
+app.use(require("cors")());
 
 app.use(express.json());
 
