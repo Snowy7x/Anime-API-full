@@ -120,9 +120,9 @@ async function getArabicEpisode(animeId, episodeId) {
             : link.includes("s.mp4")
             ? "480p"
             : "av";
-          js[i].file =
-            "http://www.snowyanime.com:4000/tools/proxy?url=" +
-            encodeURIComponent(js[i].file);
+          js[i].file = js[i].file;
+          ///"http://www.snowyanime.com:4000/tools/proxy?url=" +
+          ///encodeURIComponent(js[i].file);
         }
         return js;
       })
