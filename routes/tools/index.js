@@ -9,6 +9,7 @@ router.get("/proxy", async (req, res) => {
     headers: { range: req.headers.range },
   })
     .then(async (response) => {
+      console.log(response);
       if (!response.ok)
         return res.status(404).json({ success: false, data: response });
       res.set(await getFetchHeader(response.headers));

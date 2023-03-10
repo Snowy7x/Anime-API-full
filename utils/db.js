@@ -179,10 +179,10 @@ const ScheduleSchema = new Schema({
   Friday: [AnimeSchema],
 });
 
-const Favorites = new Schema({
+const FavoriteSchema = new Schema({
   userId: String,
   id: String,
-  name: String,
+  name: { type: String, default: null },
   coverUrl: String,
   score: { type: Number, default: null },
   year: { type: Number, default: null },
@@ -198,7 +198,7 @@ const LatestEpisodeModal = model("LatestEpisode", LatestEpisodeSchema);
 const topAnimeModal = model("topAnime", topAnimeSchema);
 const ScheduleModal = mongoose.model("Schedule", ScheduleSchema);
 
-const FavoritesModal = mongoose.model("Favorites", Favorites);
+const FavoritesModal = mongoose.model("Favorite", FavoriteSchema);
 // Functions:
 
 /**

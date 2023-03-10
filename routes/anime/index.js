@@ -111,16 +111,51 @@ router.post("/addfav", async (req, res) => {
   if (!userId) return res.status(404).send("user not found");
   if (!animeId) return res.status(404).send("anime not found");
 
-  const anime = await AnimeModal.find({ id: animeId }).catch(() => null);
+  const tryFind = await FavoritesModal.findOne({
+    userId: userId,
+    id: animeId,
+  }).catch((E) => null);
+  if (tryFind && tryFind?.name.length > 0) {
+    const favs = await FavoritesModal.find({ userId: userId }).catch(() => []);
+    return res.status(200).send(favs);
+  }
+
+  const anime = await AnimeModal.findOne({ id: animeId }).catch(() => null);
   if (!anime) return res.status(404).send("anime not found");
 
   let fav = new FavoritesModal({
     userId: userId,
     id: animeId,
-    ...anime,
+    name: anime.name,
+    coverUrl: anime.coverUrl,
+    score: anime.score,
+    year: anime.year,
+    type: anime.type,
+    status: anime.status,
+    genres_ar: anime.genres_ar,
+    genres_en: anime.genres_en,
   });
   await fav.save();
-  return res.status(200).send(fav);
+
+  const favs = await FavoritesModal.find({ userId: userId }).catch(() => []);
+  return res.status(200).send(favs);
+});
+
+router.post("/removefav", async (req, res) => {
+  const { userId, animeId } = req.body;
+  if (!userId) return res.status(404).send("user not found");
+  if (!animeId) return res.status(404).send("anime not found");
+
+  const tryFind = await FavoritesModal.findOneAndRemove({
+    userId: userId,
+    id: animeId,
+  }).catch((E) => null);
+  if (tryFind) {
+    const favs = await FavoritesModal.find({ userId: userId }).catch(() => []);
+    return res.status(200).send(favs);
+  } else {
+    return res.status(404).send("Anime not in the list");
+  }
 });
 
 function isNumeric(str) {
