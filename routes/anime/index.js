@@ -20,15 +20,15 @@ router.get("/schedule", async (req, res) => {
 });
 
 router.get("/top", async (req, res) => {
-  const { limit, offset } = req.params;
-  const top = await getTopAnimes();
-  if (limit) top = top.slice(offset ?? 0, (offset ?? 0) + limit);
+  const { limit, offset } = req.query;
+  let top = await getTopAnimes();
+  if (limit > 0) top = top.slice(offset ?? 0, (offset ?? 0) + limit);
 
   res.send(top);
 });
 
 router.get("/latest", async (req, res) => {
-  const { limit, offset } = req.params;
+  const { limit, offset } = req.query;
   let latest = await getLatestEpisodes();
   latest = latest.reverse();
   if (limit) latest = latest.slice(offset ?? 0, (offset ?? 0) + limit);
@@ -36,7 +36,8 @@ router.get("/latest", async (req, res) => {
 });
 
 router.get("/search/:animeName", (req, res) => {
-  const { animeName, limit, offset } = req.params;
+  const { animeName } = req.params;
+  const { limit, offset } = req.query;
   AnimeModal.find({
     justInfo: false,
     keywords: {
